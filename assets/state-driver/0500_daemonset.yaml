@@ -46,6 +46,9 @@ spec:
             mountPath: /etc/containers/oci/hooks.d
           - name: var-log
             mountPath: /var/log
+          - name: trusted-ca
+            mountPath: "/etc/pki/ca-trust/extracted/pem/"
+            readOnly: true
       volumes:
         - name: run-nvidia
           hostPath:
@@ -59,5 +62,11 @@ spec:
             items:
               - key: oci-nvidia-hook-json
                 path: oci-nvidia-hook.json
+        - name: trusted-ca
+          configMap:
+            name: trusted-ca
+            items:
+              - key: ca-bundle.crt
+                path: tls-ca-bundle.pem
       nodeSelector:
         nvidia.com/gpu.present: "true"
